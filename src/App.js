@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+
 import './App.css';
+import FloatingButton from './components/app/FloatingButton';
+import { useState } from 'react';
+import AppUser from './components/application/AppUser';
+import AppN from './components/application/AppN';
+import { Route, Routes } from 'react-router-dom';
+import About from './components/home/About';
 
 function App() {
+  const [user, setUser] = useState(false)
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='container'>
+      {
+        user?.user 
+        ? (
+          <AppUser user={user} />
+        ) : (
+          
+          <AppN />
+        )
+      }
+        
+      </div>
+      <Routes>
+            <Route path='/about' element={ <About /> } />
+      </Routes>
+      <FloatingButton />
     </div>
   );
 }

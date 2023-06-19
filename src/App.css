@@ -1,38 +1,115 @@
-.App {
-  text-align: center;
-}
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* ======== MAIN SECTION = */
+.main {
+  width: 90%;
+  margin: 3rem auto;
+  max-width: 50rem;
+}
+.toggle_headers {
+  max-width: 35rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.4px solid var(--gray);
+}
+.request_type {
+  padding-block: .5rem;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+.request_type.active {
+  border-bottom: 2.2px solid slateblue;
+}
+
+
+/* ============== dropdown= */
+.dropdown_indicator {
+  float: right;
+}
+
+/* ============ subject list == */
+.subject_list {
+  display: flex;
+  justify-content: space-between;
+  padding-block: .7rem;
+  border-bottom: 1.2px solid #9191ff;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.subject_list .subject {
+  width: 80%;
+}
+.subject_list .grade {
+   width: 50%;
+}
+.close {
+  position: absolute;
+  right: 0%;
+  top: 0;
+  height: 100%;
+  width: 2.4rem;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+}
+.close:hover {
+  background-color: #551bf328;
+}
+.addBtn {
+  display: flex;
+}
+.addBtn > div{
+  margin-block: 1rem;
+  border: 2px solid var(--clr-main);
+  color: var(--clr-main);
+  border-radius: 4px;
+  padding: .4rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+/* ============ DROPDOWN = */
+.dropdownWrapper {
+  position: relative;
+  margin-bottom: 3rem;
+}
+.dropdown-list {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  transform: translateY(110%);
+  z-index: 2;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  height: 0px;
+  overflow: hidden;
+}
+.showlevelDropDown {
+  visibility: visible;
+  height: 500%;
+  opacity: 1;
+}
+.dropdown {
+  background-color: #fff;
+}
+.dropdown_content {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.13);
+}
+.dropdown_content li {
+  cursor: pointer;
+}
+@media(min-width: 50rem){
+  .subject_list .subject {
+      width: 80%;
+  }
+  .subject_list .grade {
+       width: 30%;
+  }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

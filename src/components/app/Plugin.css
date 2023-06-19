@@ -1,0 +1,52 @@
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(158, 158, 173, 0.267);
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .subject_modal {
+    background-color: #fff;
+    padding: 2rem 1rem;
+    border-radius: 8px;
+  }
+  .flex_subject_modal {
+    display: flex;
+    justify-content: space-between;
+  }
+  .flex_subject_modal > div {
+    width: 47%;
+  }
+  
+  .backLink {
+    text-transform: capitalize;
+    color: var(--clr-main);
+  }
+  .backLink:active, .backLink:visited {
+    color: var(--clr-main);
+  }
+
+
+/* ========= FLOATING BUTTON = */
+.floatingButton {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--clr-main);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    margin: 1rem;
+  }
+
+  
