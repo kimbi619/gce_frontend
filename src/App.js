@@ -6,10 +6,11 @@ import AppUser from './components/application/AppUser';
 import AppN from './components/application/AppN';
 import { Route, Routes } from 'react-router-dom';
 import About from './components/home/About';
+import useLocalStorage from './UseLocalStorage';
 
 function App() {
-  const [user, setUser] = useState(false)
-  
+  const [user, setUser] = useLocalStorage('user')
+
   return (
     <div className="App">
       <div className='container'>

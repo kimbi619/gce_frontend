@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { auth } from '../../Request'
 
 const Signup = ({ handleSignup }) => {
     const [userName, setUserName] = useState('')
@@ -7,6 +8,13 @@ const Signup = ({ handleSignup }) => {
     const [password, setPassword] = useState('')
     const [c_pass, setC_pass] = useState('')
 
+    const data = {
+      "username": userName,
+      "email": email,
+      "school": school,
+      "password": password,
+      "confirm_password": c_pass
+    }
     const formSubmit = (e) => {
         e.preventDefault()
     
@@ -18,9 +26,10 @@ const Signup = ({ handleSignup }) => {
         )
     
       }
-    
-      const submitRequest = () => {
-    
+      
+      const submitRequest = async() => {
+        const res = await auth(data, 'register')
+        console.log(res);
       }
     
       

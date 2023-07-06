@@ -50,3 +50,15 @@
   }
 
   
+  .subject_modal_buttons {
+    display: flex;
+  }
+  .subject_modal_buttons .submit_main {
+    width: 60%;
+    margin-right: 1rem;
+  }
+  .subject_modal_buttons .submit_danger {
+    width: 40%;
+    background-color: rgba(220, 20, 60, 0.575);
+    border-color: crimson;
+  }

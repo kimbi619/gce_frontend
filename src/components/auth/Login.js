@@ -1,25 +1,35 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './auth.css'
+import { auth } from '../../Request'
+import useLocalStorage from '../../UseLocalStorage'
+import { UserContext } from '../context/UserContext'
 
 
 const Login = ({ handleLogin }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  
+	const [user, setUser] = useContext(UserContext);
 
   const formSubmit = (e) => {
     e.preventDefault()
 
     submitRequest()
-    .then(
-      () => {
-        clearForm()
-      }
-    )
+    // .then(
+    //   () => {
+    //     clearForm()
+    //     window.location.reload()
+    //   }
+    // )
 
   }
-
-  const submitRequest = () => {
-
+  const data = {
+    "email": email,
+    "password": password
+  }
+  const submitRequest = async() => {
+    const res = await auth(data, 'login')
+    setUser(res?.data)
   }
 
   
