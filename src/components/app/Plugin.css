@@ -34,7 +34,7 @@
 
 /* ========= FLOATING BUTTON = */
 .floatingButton {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     width: 4rem;
@@ -61,4 +61,59 @@
     width: 40%;
     background-color: rgba(220, 20, 60, 0.575);
     border-color: crimson;
+  }
+
+  .resetArea {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .resetButton {
+    background-color: rgba(0, 153, 255, 0.192);
+    padding: .2rem;
+    border-radius: 5px;
+    width: 5rem;
+    font-size: 2rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+
+
+  .reponseSection {
+    width: 60%;
+    margin: auto;
+
+  }
+  .reponseSection h2 {
+    margin-bottom: .5rem;
+    color: #777;
+    font-size: 1.5rem;
+  }
+  table {
+    margin-top: 2rem;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+  .response_message_err {
+    background-color: rgba(220, 20, 60, 0.247);
+    border: 1px solid crimson;
+    color: crimson;
+    padding: 1rem;
+    border-radius: 6px;
+  }
+  .response_message_suc {
+    background-color: rgba(20, 220, 160, 0.247);
+    border: 1px solid rgb(12, 128, 93);
+    color: rgb(12, 128, 93);
+    padding: 1rem;
+    border-radius: 6px;
   }

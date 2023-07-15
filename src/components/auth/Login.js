@@ -3,6 +3,7 @@ import './auth.css'
 import { auth } from '../../Request'
 import useLocalStorage from '../../UseLocalStorage'
 import { UserContext } from '../context/UserContext'
+import { Link } from 'react-router-dom'
 
 
 const Login = ({ handleLogin }) => {
@@ -44,7 +45,11 @@ const Login = ({ handleLogin }) => {
             <h2 className="form_title">Login</h2>
             <input type="text" value={email}onChange={e => setEmail(e.target.value)} placeholder="Email" className="form_input" />
             <input type="text" value={password}onChange={e => setPassword(e.target.value)} placeholder="Password" className="form_input" />
+            <p><Link to='/forgot-password' className='auth_link'>forgot password?</Link></p>
             <input type="submit" value="Submit" className="form_input form_input_submit" />
+            <div className='form_auth_method'>
+              <p>You don't have an account? <Link to='/signup' className='auth_link'>signup now</Link></p>
+            </div>
         </form>
     </div>
   )

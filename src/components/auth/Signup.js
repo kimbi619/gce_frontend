@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { auth } from '../../Request'
+import { useNavigate } from 'react-router-dom'
 
 const Signup = ({ handleSignup }) => {
     const [userName, setUserName] = useState('')
@@ -7,6 +8,8 @@ const Signup = ({ handleSignup }) => {
     const [school, setSchool] = useState('')
     const [password, setPassword] = useState('')
     const [c_pass, setC_pass] = useState('')
+
+    const navigate = useNavigate()
 
     const data = {
       "username": userName,
@@ -29,7 +32,14 @@ const Signup = ({ handleSignup }) => {
       
       const submitRequest = async() => {
         const res = await auth(data, 'register')
-        console.log(res);
+
+        if(res.status === 201) {
+          navigate('/confirm-email')
+          window.location.reload()
+        }
+        else {
+          alert("Unable to process your request. Try again")
+        }
       }
     
       

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const token = JSON.parse(localStorage.getItem('user'))
+const token = localStorage.getItem('user') 
 
 const configToken = {
     headers: {

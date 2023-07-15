@@ -3,7 +3,12 @@ import SubjectModal from '../app/SubjectModal'
 import { BsChevronDown } from 'react-icons/bs'
 import axios from 'axios'
 import { MdOutlineClose } from 'react-icons/md'
+import { FiRefreshCw } from 'react-icons/fi'
 import { uploadCertificate, validateData } from '../../Request'
+
+
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 
 const Home = () => {
     const [subjectModal, setSubjectModal] = useState(false)
@@ -140,53 +145,127 @@ const Validate = () => {
 
 const Cert = () => {
     const [certificate, setCertificate] = useState('')
+    const [img, setImg] = useState(null)
+    const [croppedImageSrc, setCroppedImageSrc] = useState(null);
+    const [response, setResponse] = useState(null)
+    const [isloading, setIsloading] = useState(false)
+    
     const importImage = (e) => {
         const file = e.target.files[0];
+        setImg(file)
         const reader = new FileReader();
         reader.onload = () => {
             setCertificate(reader.result)
         }
         reader.readAsDataURL(file);
-        
     }
+
+    const [crop, setCrop] = useState({ 
+        unit: "%", 
+        width: 30, 
+        aspect: 4 / 3 
+    });
+
+
     const data = {
         "certificate": certificate
     }
     const submitCertificate = (e) => {
         e.preventDefault();
         sendData()
-        // .then(
-        //         clearForm()
-        // )
     }
+    const onCropComplete = (croppedArea, croppedAreaPixels) => {
+        const canvas = document.createElement('canvas');
+        const img = document.createElement('img');
+
+        img.src = certificate;
+        img.onload = () => {
+            canvas.width = croppedAreaPixels.width;
+            canvas.height = croppedAreaPixels.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(
+            img,
+            croppedAreaPixels.x,
+            croppedAreaPixels.y,
+            croppedAreaPixels.width,
+            croppedAreaPixels.height,
+            0,
+            0,
+            croppedAreaPixels.width,
+            croppedAreaPixels.height
+            );
+            canvas.toBlob((blob) => {
+                setCroppedImageSrc(blob);
+            }, 'image/jpeg');
+        };
+    };
 
     const clearForm = () => {
+        setResponse(null)
         setCertificate('')
     }
+
     const sendData = async() => {
+        setIsloading(true)
         try {
-            const response = uploadCertificate(data)
-            console.log(response);
+            const formData = new FormData();
+            formData.append('image', img);
+            const res = await axios.post('http://localhost:8000/api/v1/gce/image/', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            })
+            setResponse(res.data)
+              
         } catch (error) {
             console.error('Error uploading image', error);
         }
+        setIsloading(false)
     }
+
     return (
+        <>
         <form onSubmit={submitCertificate} className="form">
             <h3 className="form_title">Import a GCE certificate</h3>
-            
-            <div type="text" className="form_input form_media_input">
-                <div className="image_preview">
-                    { certificate ? <img src={certificate} className="image_preview_img" alt="certificate" /> : 'CERT'}
-                </div>
-                <input type="file" onChange={importImage} accept=".jpg,.png,.webp" id="certificate_image" />
-            </div> 
-            <div className="dropdown-list">
-            </div>
+            {
+                !certificate ?
+                (
+                    <div type="text" className="form_input form_media_input">
+                        <div className="image_preview">
+                            { certificate ? <img src={certificate} className="image_preview_img" alt="certificate" /> : 'CERT'}
+                        </div>
+                        <input type="file" onChange={importImage} accept=".jpg,.png,.webp" id="certificate_image" />
+                    </div> 
+
+                )
+                : 
+                (
+                    <div>
+                        <ReactCrop crop={crop} onChange={newCrop => setCrop(newCrop)} onComplete={onCropComplete}>
+                            <img src={certificate} alt="certificate" />
+                        </ReactCrop>
+                    </div>
+                )
+            }
+
             
             
             <input type="submit" value="Scan & Authenticate" className="form_input form_input_submit" />
+
+            <div className='resetArea'>
+                <div className='resetButton' onClick={clearForm}>
+                    <FiRefreshCw />
+                </div>
+            </div>
         </form>
+        {
+            isloading ?
+            <div>loading...</div>
+            :
+            response && <ServerResponse response={response} />
+        }
+        
+        </>
     )
 }
 
@@ -221,5 +300,45 @@ const Results = () => {
             </div>
             <input type="submit" value="Scan & Authenticate" className="form_input form_input_submit" />
         </form>
+    )
+}
+
+
+const ServerResponse = ({ response }) => {
+    return (
+        <div className='reponseSection'>
+        {
+            response.is_valid ?
+            <p className='response_message_suc'>{ response.message }</p>
+            :
+            <p className='response_message_err'>{ response.message }</p>
+        }
+         <div className='main'>
+            <h2>Name: { response.name }</h2>
+            <h2>Year: { response.year }</h2>
+            <h2>Ordinary: { response.level }</h2>
+            <h2>Number of Subjects: { response.results.length }</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Subject</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        response.results.map(result => (
+                            <tr key={result.code}>
+                                <td>{ result.code }</td>
+                                <td>{ result.Subject }</td>
+                                <td>{ result.Grade }</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+         </div>
+        </div>
     )
 }
