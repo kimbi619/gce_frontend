@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { auth } from '../../Request'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-const Signup = ({ handleSignup }) => {
+const Signup = ({ handleSignup, handleAuthToggle }) => {
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [school, setSchool] = useState('')
@@ -37,9 +37,7 @@ const Signup = ({ handleSignup }) => {
           navigate('/confirm-email')
           window.location.reload()
         }
-        else {
-          alert("Unable to process your request. Try again")
-        }
+        console.log(res.data);
       }
     
       
@@ -62,6 +60,9 @@ const Signup = ({ handleSignup }) => {
             <input type="text" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" className="form_input" />
             <input type="text" value={c_pass} onChange={e => setC_pass(e.target.value)} placeholder="Confirm Password" className="form_input" />
             <input type="submit" value="Submit" className="form_input form_input_submit" />
+            <div className='form_auth_method'>
+              <p>You already have an account? <Link onClick={ handleAuthToggle } className='auth_link'>login now</Link></p>
+            </div>
         </form>
     </div>
   )

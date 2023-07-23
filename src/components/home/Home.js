@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import SubjectModal from '../app/SubjectModal'
 import { BsChevronDown } from 'react-icons/bs'
 import axios from 'axios'
@@ -56,6 +56,11 @@ const Home = () => {
 
 export default Home
 
+const config = {
+    headers: {
+        "Content-Type": "application/json",
+    }
+}
 
 const Validate = () => {
     const [subjectModal, setSubjectModal] = useState(false)
@@ -64,12 +69,43 @@ const Validate = () => {
     const [level, setLevel] = useState('Level')
     const [levelDropDown, setLevelDropDown] = useState(false)
     const [grade_list, setGrade_list] = useState([])
-   
+    const [reference, setReference] = useState(false)
+    const [selectedRequirement, seTselectedRequirement] = useState('Select Requirement')
+    const [requirementDropdown, setRequirementDropdown] = useState(false)
+    const [subjectList, setSubjectList] = useState([])
+    const [requirementList, setRequirementList] = useState([])
+    const [year, setYear] = useState('')
+    const [serverResponse, setServerResponse] = useState(null)
+    
+    useLayoutEffect(() => {
+      getSubjects()
+    }, [])
+
+    const getSubjects = async() => {
+        const promises = [
+            axios.get('http://localhost:8000/api/v1/gce/subjects/'),
+            axios.get('http://localhost:8000/api/v1/gce/requirements/')
+        ]
+        try {
+            const response = await Promise.all(promises)    
+            
+            setSubjectList(response[0].data)
+            setRequirementList(response[1].data)
+            
+        }
+        catch(err) {
+            console.warn(err);
+        }
+    }
+
     const serverRequest = {
         "name": studName,
-        "level": level,
+        "level": level.toLowerCase(),
+        "year": "2011",
+        "education": "general",
         "subjects": grade_list
     }
+
     const addSubjectList = (e, data) => {
         e.preventDefault()
         setGrade_list(grade_list => [...grade_list, data])
@@ -90,18 +126,26 @@ const Validate = () => {
         setGrade_list(list)
 
     }
-    
-    const submitForm = (e) => {
-        e.preventDefault()
 
-        validateData(serverRequest, 'validate')
+    const selectRequirement = (requirement) => {
+        seTselectedRequirement(`${requirement?.purpose} (${requirement?.name})`)
+        setRequirementDropdown(false)
 
     }
+    
+    const submitForm = async(e) => {
+        e.preventDefault()
+        const res = await validateData(serverRequest, 'validate')
+        res.status === 202 && setServerResponse(res.data)
+    }
     return (
+
+        <>
         <form onSubmit={ submitForm } className="form">
                     <h3 className="form_title">Input Student Results</h3>
-                    <input type="text" value={studName} onChange={e => setStudName(e.target.value)} placeholder="Student Name" className="form_input" />
+                    <input type="text" required value={studName} onChange={e => setStudName(e.target.value.toUpperCase())} placeholder="Student Name" className="form_input" />
 
+                    <input type="text" value={year} onChange={e => setYear(e.target.value.toUpperCase())} required   placeholder="Year" className="form_input" />
                     <div className='dropdownWrapper'>
                         <div onClick={() => setLevelDropDown(!levelDropDown)} type="text" className="form_input dropdown">
                             <span id='level_placeholder'>{ level }</span>
@@ -135,11 +179,41 @@ const Validate = () => {
                                 ))
                             }
                         </div>
+                        <div type="text" className="form_input">
+                            <input type='checkbox' className='requirement_checkbox' name='cross_reference' value={reference} onChange={() => setReference(!reference)} />
+                            <label htmlFor='cross_reference'className='reference_label'>Compare with Requirement</label>
+                        </div>
+                        {
+                            reference && (
+                                <div className='dropdownWrapper'>
+                                    <div onClick={() => setRequirementDropdown(!requirementDropdown)} type="text" className="form_input dropdown">
+                                        <span id='level_placeholder'>{ selectedRequirement }</span>
+                                        <span className="dropdown_indicator"><BsChevronDown /></span>
+                                    </div>
+                                    <div className={`dropdown-list dropdown-subjects  ${requirementDropdown ? 'showlevelDropDown': ''}`}>
+                                        <div type="text" className="form_input dropdown dropdown_content ">
+                                            <ul>
+                                                {
+                                                    requirementList && requirementList.map( requirement => (
+                                                        <li key={requirement?.id} onClick={() => selectRequirement(requirement)}>{ requirement?.purpose } ({requirement?.name})</li>
+                                                    ))
+                                                }
+                                            </ul>
+                                        </div> 
+                                    </div>
+                                </div>
+                            )
+                        }
                         <div className="addBtn"><div onClick={() => setSubjectModal(true)}>+ Add</div></div>
                     </div>
-                    { subjectModal ? <SubjectModal handleAddSubject={ addSubjectList } selectedLevel={level} removeSubjectModal={removeSubjectModal} /> : '' }
+                    { subjectModal ? <SubjectModal subjectServer={ subjectList } requirements={ requirementList } handleAddSubject={ addSubjectList } selectedLevel={level} removeSubjectModal={removeSubjectModal} /> : '' }
                     <input type="submit" value="Verify" className="form_input form_input_submit" />
                 </form>
+                <br/>
+                <br/>
+                { serverResponse && <ServerResponse response={serverResponse} /> }
+
+        </>
     )
 }
 
@@ -305,6 +379,7 @@ const Results = () => {
 
 
 const ServerResponse = ({ response }) => {
+    console.log(response);
     return (
         <div className='reponseSection'>
         {
@@ -327,12 +402,13 @@ const ServerResponse = ({ response }) => {
                     </tr>
                 </thead>
                 <tbody>
+
                     {
-                        response.results.map(result => (
-                            <tr key={result.code}>
-                                <td>{ result.code }</td>
-                                <td>{ result.Subject }</td>
-                                <td>{ result.Grade }</td>
+                        response?.results.map(result => (
+                            <tr key={ result?.subject }>
+                                <td>{ result?.code ? result.code : "Null" }</td>
+                                <td>{ result?.subject }</td>
+                                <td>{ result?.grade }</td>
                             </tr>
                         ))
                     }

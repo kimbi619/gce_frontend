@@ -66,6 +66,7 @@ a {
   background-color: var(--clr-main);
   color: #fff;
   margin-right: 1rem;
+  cursor: pointer;
 }
 
 ul {

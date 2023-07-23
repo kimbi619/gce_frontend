@@ -12,7 +12,6 @@ const AppN = () => {
 
 
     const login = () => {
-      console.log('toggle login...', showLoginForm);
       setShowLoginForm(!showLoginForm)
     }
 
@@ -20,6 +19,10 @@ const AppN = () => {
       setShowSignupForm(!showSignupForm)
     }
 
+    const toggleAuth = () => {
+      signup()
+      login()
+    }
   return (
     <div>
         <Nav handleLogin = {login} handleSignup={signup} />
@@ -27,8 +30,8 @@ const AppN = () => {
             <Route path='/?' element={ <Home /> } />
             <Route path='/confirm-email' element={ <ConfirmEmail /> } />
         </Routes>
-        { showSignupForm &&  <Signup handleSignup={signup} />}
-        { showLoginForm && <Login handleLogin={login} /> }
+        { showSignupForm &&  <Signup handleAuthToggle={ toggleAuth } handleSignup={signup} />}
+        { showLoginForm && <Login handleAuthToggle={ toggleAuth } handleLogin={login} /> }
     </div>
   )
 }

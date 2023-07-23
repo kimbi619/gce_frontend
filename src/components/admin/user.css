@@ -1,0 +1,60 @@
+
+.user_list {
+    margin-bottom: 1rem;
+}
+.user_list li {
+    cursor: pointer;
+    padding-top: 1.5rem;
+    padding-left: 0;
+}
+
+.user_list li .icon {
+    padding: 0.2rem .5rem;
+    margin-inline: .5rem;
+    margin-bottom: .1rem;
+    font-family: monospace;
+    border-radius: 50%;
+    background-color: #d3d3ff;
+}
+
+.delete_requirement {
+    float: right;
+    border: 1px solid crimson;
+    color: crimson;
+    background-color: rgba(220, 20, 60, 0.26);
+    padding: 0.3rem 1rem;
+    border-radius: 4px;
+}
+.delete_requirement:hover {
+    background-color: crimson;
+    color: #fff;
+}
+
+.delete_container {
+    background-color: #fff;
+    padding: 1.5rem;
+    min-height: 5rem;
+    border-radius: 4px;
+}
+.deleteModal .deleteWrapper_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+.deleteWrapper_btn .delete_requirement{
+    margin-right: 1rem;
+    cursor: pointer;
+}
+.deleteWrapper_btn .delete_requirement:nth-child(2){
+    border-color: blue;
+    color: blue;
+    background-color: #fff;
+}
+.deleteModal .shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

@@ -72,7 +72,13 @@
   font-weight: 700;
   cursor: pointer;
 }
-
+.reference_label {
+  margin-left: 1rem;
+  margin-bottom: 2px;
+}
+.requirement_checkbox {
+  margin-top: 1px;
+}
 /* ============ DROPDOWN = */
 .dropdownWrapper {
   position: relative;
@@ -90,6 +96,14 @@
   transition: all 0.3s ease-in-out;
   height: 0px;
   overflow: hidden;
+} 
+
+
+.dropdown-subjects {
+  overflow-y: scroll;
+}
+.dropdown-subjects::-webkit-scrollbar{
+  display: none;
 }
 .showlevelDropDown {
   visibility: visible;
@@ -98,6 +112,21 @@
 }
 .dropdown {
   background-color: #fff;
+}
+.subject_input_dropdown {
+  padding: 0rem !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.subject_input_dropdown .subject_form_input {
+  border: none;
+  width: 100%;
+  margin: 0;
+}
+.subject_dropdown_indicator {
+  width: 4rem;
+  text-align: center;
 }
 .dropdown_content {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.13);

@@ -31,9 +31,9 @@
   }
   .form_title {
     text-transform: capitalize;
-    margin-bottom: 1rem;
+    margin: 1rem;
     text-align: center;
-    color: #888;
+    color: #283758;
   }
   .form_input {
     width: 100%;
