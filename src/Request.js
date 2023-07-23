@@ -69,3 +69,13 @@ export const validateData = async(data, path) => {
         return err
     }
 }
+export const validateDataReq = async(data, id) => {
+    try {
+        const response = await axios.post(`http://localhost:8000/api/v1/gce/validate/${ id }/`, data, config);
+        return response
+
+    } catch(err) {
+        console.warn(err)
+        return err
+    }
+}

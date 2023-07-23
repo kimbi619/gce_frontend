@@ -4,7 +4,7 @@ import { BsChevronDown } from 'react-icons/bs'
 import axios from 'axios'
 import { MdOutlineClose } from 'react-icons/md'
 import { FiRefreshCw } from 'react-icons/fi'
-import { uploadCertificate, validateData } from '../../Request'
+import { uploadCertificate, validateData, validateDataReq } from '../../Request'
 
 
 import ReactCrop from 'react-image-crop';
@@ -76,6 +76,7 @@ const Validate = () => {
     const [requirementList, setRequirementList] = useState([])
     const [year, setYear] = useState('')
     const [serverResponse, setServerResponse] = useState(null)
+    const [re, setRe] = useState(null)
     
     useLayoutEffect(() => {
       getSubjects()
@@ -101,7 +102,7 @@ const Validate = () => {
     const serverRequest = {
         "name": studName,
         "level": level.toLowerCase(),
-        "year": "2011",
+        "year": year,
         "education": "general",
         "subjects": grade_list
     }
@@ -130,13 +131,28 @@ const Validate = () => {
     const selectRequirement = (requirement) => {
         seTselectedRequirement(`${requirement?.purpose} (${requirement?.name})`)
         setRequirementDropdown(false)
+        setRe(requirement)
 
     }
     
-    const submitForm = async(e) => {
+    const submitForm = (e) => {
         e.preventDefault()
+        console.log(reference);
+        if( reference) {
+            validateWithRef()
+        } else {
+            validate()
+        }
+    }
+    const validate = async() => {
+        console.log(serverRequest);
         const res = await validateData(serverRequest, 'validate')
         res.status === 202 && setServerResponse(res.data)
+    }
+    const validateWithRef = async() => {
+        const res = await validateDataReq(serverRequest, re?.id)
+        
+        res.status === 200 && setServerResponse(res.data)
     }
     return (
 
@@ -379,7 +395,6 @@ const Results = () => {
 
 
 const ServerResponse = ({ response }) => {
-    console.log(response);
     return (
         <div className='reponseSection'>
         {
@@ -387,6 +402,15 @@ const ServerResponse = ({ response }) => {
             <p className='response_message_suc'>{ response.message }</p>
             :
             <p className='response_message_err'>{ response.message }</p>
+        }
+        <br />
+        {
+            response?.requirement_met && (
+                response.requirement_met ?
+                <p className='response_message_suc'>You meet the requirement for applying into this institution</p>
+                :
+                <p className='response_message_err'>You do NOT meet the requirement for applying into this institution</p>
+            )
         }
          <div className='main'>
             <h2>Name: { response.name }</h2>
