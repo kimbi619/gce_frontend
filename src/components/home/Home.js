@@ -415,7 +415,7 @@ const ServerResponse = ({ response }) => {
          <div className='main'>
             <h2>Name: { response.name }</h2>
             <h2>Year: { response.year }</h2>
-            <h2>Ordinary: { response.level }</h2>
+            <h2>Level: { response.level }</h2>
             <h2>Number of Subjects: { response.results.length }</h2>
             <table>
                 <thead>
